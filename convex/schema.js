@@ -44,6 +44,7 @@ export default defineSchema({
         category: v.string(),
         tags: v.array(v.string()),
         timezone: v.string(),
+        startDate: v.optional(v.number()),
 
         //location details
         locationType: v.union(v.literal("physical"), v.literal("person")),
@@ -64,7 +65,38 @@ export default defineSchema({
 
 
         //Timestamps
-        createdAt: v.number(),  
+        createdAt: v.number(),
         updatedAt: v.number(),
-    }),
+    })
+        .index("by_organizer", ["organizerId"])
+        .index("by_category", ["category"])
+        .index("by_start_date", ["startDate"])
+        .index("by_slug", ["slug"])
+        .searchIndex("search_title", { searchField: "title" }),
+    registrations: defineTable({
+        eventId: v.id("events"),
+        userId: v.id("users"),
+
+
+        //Attending info
+        attendeeName: v.string(),
+        attendeeEmail: v.string(),
+
+        //QR Code for entry
+        qrCode: v.string(), //Unique ID for QR 
+
+
+        //check-in
+        checkedIn: v.boolean(),
+        checkedInAt: v.optional(v.number()),
+
+        //status
+        status: v.union(v.literal("cancelled"), v.literal("confirmed")),
+
+        registeredAt: v.number(),
+    })
+        .index("by_event", ["eventId"])
+        .index("by_user", ["userId"])
+        .index("by_event_user", ["eventId", "userId"])
+        .index("by_qrCode", ["qrCode"]),
 });

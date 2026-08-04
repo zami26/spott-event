@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div>
       <section className="pb-16 relative overflow-hidden">
-        <div className="max-w.7xl mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
           {/* left side */}
           <div className="text-center sm:text-left">
             <span className="text-gray-500 font-light tracking-wide mb-6">Spott

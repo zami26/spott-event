@@ -44,6 +44,7 @@ export default defineSchema({
         category: v.string(),
         tags: v.array(v.string()),
         timezone: v.string(),
+        startDate: v.optional(v.number()),
 
         //location details
         locationType: v.union(v.literal("physical"), v.literal("person")),

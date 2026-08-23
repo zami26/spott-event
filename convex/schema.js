@@ -45,6 +45,7 @@ export default defineSchema({
         tags: v.array(v.string()),
         timezone: v.string(),
         startDate: v.optional(v.number()),
+        endDate: v.optional(v.float64()),
 
         //location details
         locationType: v.union(v.literal("physical"), v.literal("person")),
@@ -52,10 +53,11 @@ export default defineSchema({
         address: v.optional(v.string()),
         city: v.string(),
         state: v.optional(v.string()),
+        country: v.string(),
 
         //Capacity and ticketing
         capacity: v.number(),
-        ticketTypes: v.union(v.literal("free"), v.literal("paid")),
+        ticketType: v.union(v.literal("free"), v.literal("paid")),
         ticketPrice: v.optional(v.number()), //Only for paid events
         registrationCount: v.number(),
 

@@ -2,17 +2,20 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Carousel, CarouselContent, CarouselItem, Card, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { api } from '@/convex/_generated/api';
 import { useConvexQuery } from '@/hooks/use-convex-query';
 import { format } from 'date-fns';
 import Autoplay from 'embla-carousel-autoplay';
-import { ArrowRight, Calendar, Loader2, MapPin, Users } from 'lucide-react';
+import { ArrowRight, BadgeAlert, Calendar, Loader2, MapPin, Users } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useRef } from 'react';
 
 import { createLocationSlug } from '@/lib/location-utils';
+import EventCard from '@/components/event-card';
+import { CATEGORIES } from '@/lib/data';
+import { Card, CardContent } from '@/components/ui/card';
 
 
 const ExplorePage = () => {
@@ -22,7 +25,6 @@ const ExplorePage = () => {
 
 
   const { data: featuredEvents, isLoading: loadingFeatured } = useConvexQuery(api.explore.getFeaturedEvents, { limit: 3 });
-  // console.log("featuredEvents", featuredEvents);
   const { data: localEvents, isLoading: loadingLocal } = useConvexQuery(api.explore.getEventsByLocation,
     {
       city: currentUser?.city || "Gurugram",
@@ -37,8 +39,21 @@ const ExplorePage = () => {
 
   const { data: categoryCounts } = useConvexQuery(api.explore.getCategoryCounts);
 
+
+  const categoriesWithCounts = CATEGORIES.map((cat) => {
+    return {
+      ...cat,
+      count: categoryCounts?.[cat.id] || 0,
+    };
+  })
+
+
+
   const handleEventClick = (slug) => {
     router.push(`/events/${slug}`);
+  }
+  const handleCategoryClick = (categoryId) => {
+    router.push(`/events/${categoryId}`);
   }
 
   const handleLocationEvents = () => {
@@ -162,17 +177,62 @@ const ExplorePage = () => {
             >View All <ArrowRight className="w-4 h-4" />
             </Button>
           </div>
+
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {localEvents.map((event) => (
+              <EventCard
+                key={event._id}
+                event={event}
+                variant='grid'
+                onClick={() => handleEventClick(event.slug)} />
+            ))}
+          </div>
         </div>
 
       )}
 
 
+
       {/* Browse by category section */}
 
+      <div className="mb-16">
+        <h2 className="text-3xl font-bold mb-6">
+          Browse by Category
+        </h2>
 
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {categoriesWithCounts.map((category) => (
+            <Card
+              key={category.id}
+              className="py-2 group cursor-pointer hover:shadow-lg transition-all hover:border-purple-500/50"
+              onClick={() => handleCategoryClick(category.id)}
+            >
+              <CardContent className="px-3 sm:p-6 flex items-center gap-3">
+                <div className="text-3xl sm:text-4xl">{category.icon}</div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold mb-1group-hover:text-purple-400 transition-colors">
+                    {category.label}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {category.count} Event {category.count !== 1 ? "s" : ""}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
 
       {/* popular events across the country section */}
-
+      {popularEvents && popularEvents.length > 0 && (
+  <div className="mb-16">
+    <div className="mb-6">
+      <h2 className="text-3xl font-bold mb-1">Popular Across Country</h2>
+      <p className="text-muted-foreground">Trending event nationwide</p>
+    </div>
+  </div>
+)}
 
 
       {/* popular events across the country section */}

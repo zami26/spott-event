@@ -8,6 +8,8 @@ import { Button } from './ui/button'
 import { BarLoader } from 'react-spinners'
 import { useStoreUser } from '@/hooks/use-store-user'
 import { Building, Plus, Ticket } from 'lucide-react';
+import { OnboardingModal } from './onboarding-modal';
+import { useOnboarding } from '@/hooks/use-onboarding';
 
 const Header = () => {
 
@@ -15,6 +17,8 @@ const Header = () => {
     const { isLoading } = useStoreUser();
 
     const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+
+    const {showOnboarding, handleOnboardingCompleted, handleOnboardingSkip} = useOnboarding();
 
     return (
         <>
@@ -40,7 +44,7 @@ const Header = () => {
                     <div className='flex items-center'>
 
                         <Button variant={'ghost'} size='small' className={"me-4"} onClick=
-                            {()=>setShowUpgradeModal(true)}>
+                            {() => setShowUpgradeModal(true)}>
                             Pricing
                         </Button>
 
@@ -71,19 +75,19 @@ const Header = () => {
                                 <UserButton.MenuItems>
 
                                     <UserButton.Link
-                                    label='My Tickets'
-                                    labelIcon={<Ticket size={16}/>}
-                                    href='/my-tickets'
+                                        label='My Tickets'
+                                        labelIcon={<Ticket size={16} />}
+                                        href='/my-tickets'
                                     />
 
                                     <UserButton.Link
-                                    label='My Events'
-                                    labelIcon={<Building size={16}/>}
-                                    href='/my-events'
+                                        label='My Events'
+                                        labelIcon={<Building size={16} />}
+                                        href='/my-events'
                                     />
 
 
-                                  <UserButton.Action label='manageAccount'/> 
+                                    <UserButton.Action label='manageAccount' />
                                 </UserButton.MenuItems>
 
 
@@ -101,6 +105,13 @@ const Header = () => {
 
             </nav>
             {/* modal */}
+            <OnboardingModal 
+            isOpen={showOnboarding}
+            onClose={handleOnboardingSkip}
+            onCompleted={handleOnboardingCompleted}
+            />
+
+
         </>
     )
 }

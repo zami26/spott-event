@@ -143,15 +143,15 @@ const EventCard = ({
             </Button>
             {oneDelete && (
               <Button
-              variant='outline'
-              size='sm'
-              onclick={(e)=>{
-                e.stopPropagation();
-                oneDelete(event._id);
-              }}
-              className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                variant='outline'
+                size='sm'
+                onclick={(e) => {
+                  e.stopPropagation();
+                  oneDelete(event._id);
+                }}
+                className="text-red-500 hover:text-red-600 hover:bg-red-50"
               >
-                <Trash2  className='w-4 h-4'/>
+                <Trash2 className='w-4 h-4' />
               </Button>
             )
 

@@ -78,23 +78,20 @@ export const getPopularEvents = query({
 
 // Get events by category count
 export const getEventsByCategory = query({
-    args: {
-        category: v.string(),
-        limit: v.optional(v.number()),
-    },
-    handler: async (ctx, args) => {
-        const now = Date.now();
-        let events = await ctx.db
-            .query("events")
-            .withIndex("by_category")
-            .filter((q) => q.gte(q.field("startDate"), now))
-            .collect();
+  args: {
+    category: v.string(),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    const now = Date.now();
+    const events = await ctx.db
+      .query("events")
+      .withIndex("by_category", (q) => q.eq("category", args.category))
+      .filter((q) => q.gte(q.field("startDate"), now))
+      .collect();
 
-
-        return events.slice(0, args.limit ?? 12);
-    },
-
-
+    return events.slice(0, args.limit ?? 12);
+  },
 });
 
 // Get popular events by registration count

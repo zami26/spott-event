@@ -7,7 +7,7 @@ import { api } from '@/convex/_generated/api';
 import { useConvexQuery } from '@/hooks/use-convex-query';
 import { format } from 'date-fns';
 import Autoplay from 'embla-carousel-autoplay';
-import { ArrowRight, BadgeAlert, Calendar, Loader2, MapPin, Users } from 'lucide-react';
+import { ArrowRight, Calendar, Loader2, MapPin, Users } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useRef } from 'react';
@@ -27,8 +27,8 @@ const ExplorePage = () => {
   const { data: featuredEvents, isLoading: loadingFeatured } = useConvexQuery(api.explore.getFeaturedEvents, { limit: 3 });
   const { data: localEvents, isLoading: loadingLocal } = useConvexQuery(api.explore.getEventsByLocation,
     {
-      city: currentUser?.city || "Gurugram",
-      state: currentUser?.state || "Haryana",
+      city: currentUser?.city || "Gurgaon",
+      state: currentUser?.state || "Haryana" ,
       limit: 4,
     });
 
@@ -53,16 +53,17 @@ const ExplorePage = () => {
     router.push(`/events/${slug}`);
   }
   const handleCategoryClick = (categoryId) => {
-    router.push(`/events/${categoryId}`);
+    router.push(`/explore/${categoryId}`);
   }
 
   const handleLocationEvents = () => {
-    const city = currentUser?.location?.city || "Gurugram";
+    const city = currentUser?.location?.city || "Gurgaon";
     const state = currentUser?.location?.state || "Haryana";
 
     const slug = createLocationSlug(city, state);
     router.push(`/explore/${slug}`);
   }
+
 
   //loading state
 
@@ -75,7 +76,6 @@ const ExplorePage = () => {
       </div>
     );
   }
-
   return (
     <>
 
